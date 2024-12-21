@@ -1,0 +1,63 @@
+import random
+
+class Creature:
+    def __init__(self, name, health, attack, defense, special_move):
+        self.name = name
+        self.health = health
+        self.attack = attack
+        self.defense = defense
+        self.special_move = special_move
+
+    def take_damage(self, damage):
+        damage -= self.defense
+        if damage < 0:
+            damage = 0
+        self.health -= damage
+        print(f"{self.name} takes {damage} damage.")
+
+    def attack(self, enemy):
+        damage = random.randint(0, self.attack)
+        enemy.take_damage(damage)
+        print(f"{self.name} attacks {enemy.name} for {damage} damage!")
+
+    def use_special_move(self, enemy):
+        print(f"{self.name} uses {self.special_move}!")
+        # Implement specific effects for each special move
+        # For example:
+        if self.name == "Snake King":
+            # Poison attack, reduce enemy's health over time
+            enemy.health -= 10
+            print(f"{enemy.name} is poisoned!")
+        elif self.name == "Dog King":
+            # Charge attack, deal increased damage
+            damage = random.randint(self.attack, self.attack * 2)
+            enemy.take_damage(damage)
+            print(f"{self.name} charges and deals {damage} damage!")
+
+# Create the creatures
+snake_king = Creature("Snake King", 100, 20, 5, "Venomous Bite")
+dog_king = Creature("Dog King", 100, 15, 10, "Mighty Bark")
+
+# Battle loop
+while snake_king.health > 0 and dog_king.health > 0:
+    print("Snake King's turn:")
+    action = input("Choose an action: 1. Attack 2. Use Special Move\n")
+    if action == '1':
+        snake_king.attack(dog_king)
+    elif action == '2':
+        snake_king.use_special_move(dog_king)
+
+    if dog_king.health <= 0:
+        break
+
+    print("Dog King's turn:")
+    action = input("Choose an action: 1. Attack 2. Use Special Move\n")
+    if action == '1':
+        dog_king.attack(snake_king)
+    elif action == '2':
+        dog_king.use_special_move(snake_king)
+
+if snake_king.health > 0:
+    print("The Snake King reigns supreme!")
+else:
+    print("The Dog King conquers all!")
